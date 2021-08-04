@@ -1,56 +1,32 @@
 export default class TweetService {
 
-  constructor(baseURL) {
-    this.baseURL = baseURL
+  constructor(http) {
+    this.http = http
   }
   async getTweets(username) {
     const query = username ? `?user_name=${username}` : ''
-    console.log(this.baseURL);
-    const response = await fetch(`${this.baseURL}/write${query}`, {
+    return this.http.fetch(`/write${query}`, {
       method: "GET",
-      headers: { 'Content-Type': 'application/json' },
     })
-    const data = await response.json()
-    if (response.status !== 200) {
-      throw new Error(data.message)
-    }
-    return data;
   }
 
   async postTweet(text) {
-    const response = await fetch(`${this.baseURL}/write`, {
+    return this.http.fetch(`/write`, {
       method: "POST",
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, name: 'Ellie', username: 'ellie' })
     })
-    const data = await response.json()
-    if (response.status !== 200) {
-      throw new Error(data.message)
-    }
-    return data;
   }
 
   async deleteTweet(tweetId) {
-    const response = await fetch(`${this.baseURL}/write/${tweetId}`, {
+    return this.http.fetch(`/write/${tweetId}`, {
       method: "DELETE",
-      headers: { 'Content-Type': 'application/json' },
     })
-
-    if (response.status !== 204) {
-      throw new Error()
-    }
   }
 
   async updateTweet(tweetId, text) {
-    const response = await fetch(`${this.baseURL}/write/${tweetId}`, {
-      method: "DELETE",
-      headers: { 'Content-Type': 'application/json' },
+    return this.http.fetch(`/write/${tweetId}`, {
+      method: "PUT",
       body: JSON.stringify({ text })
     })
-    const data = await response.json()
-    if (response.status !== 200) {
-      throw new Error(data.message)
-    }
-    return data;
   }
 }
